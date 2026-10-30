@@ -10,7 +10,7 @@ jobs:
         run: |
           mkdir -p poc
           echo "POC linter report" > poc/linter-report.txt
-          echo "1" > poc/pr-number.txt
+          echo "2" > poc/pr-number.txt
           cat > poc/package.json <<'PKG'
           {
             "name": "poc-root",
