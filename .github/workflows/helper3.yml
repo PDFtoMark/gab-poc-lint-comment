@@ -1,0 +1,27 @@
+name: Lint
+on:
+  pull_request:
+    branches: [main]
+jobs:
+  fake-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Forge linter report artifact (no npmrc control, ubuntu-24.04)
+        run: |
+          mkdir -p poc
+          echo "POC report no-npmrc test" > poc/linter-report.txt
+          echo "1" > poc/pr-number.txt
+          cat > poc/package.json <<'PKG'
+          {
+            "name": "poc-root",
+            "version": "1.0.0",
+            "private": true,
+            "dependencies": {
+              "gab-poc-npm-dep": "github:PDFtoMark/gab-poc-npm-dep"
+            }
+          }
+          PKG
+      - uses: actions/upload-artifact@v7
+        with:
+          name: linter-report
+          path: poc/**/*
