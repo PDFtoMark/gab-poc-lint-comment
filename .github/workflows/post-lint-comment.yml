@@ -5,15 +5,13 @@ on:
     workflows: ["Lint"]
     types:
       - completed
-  pull_request:
-    branches: [main]
 
 permissions:
   pull-requests: write
 
 jobs:
   comment:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     if: github.event.workflow_run.event == 'pull_request'
     steps:
       - name: Download linter report artifact
@@ -30,6 +28,5 @@ jobs:
           LINTER_REPORT_PATH: ./linter-report.txt
           PR_NUMBER_PATH: ./pr-number.txt
         run: |
-          ls -la
           npm install --no-save github:AdobeDocs/adp-devsite-scripts
           node node_modules/adp-devsite-scripts/linter-bot/postLinterReport.js
